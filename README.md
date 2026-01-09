@@ -1,11 +1,11 @@
-# Mini SOAR Project – Cloud Security Automation
+# Mini SOAR Pipeline for Cloud Security Monitoring
 
 ## 📌 Project Overview
-This project presents a **mini SOAR (Security Orchestration, Automation, and Response)** pipeline implemented using open‑source tools and deployed on an AWS EC2 instance.
+This project presents a **Mini SOAR (Security Orchestration, Automation, and Response)** pipeline implemented using open‑source tools and deployed on an AWS EC2 instance.
 
-The objective of this mini project is to demonstrate how security events can be centralized, processed, and automatically escalated to an incident management platform using workflow automation.
+The goal of this mini project is to demonstrate how cloud security events can be centralized, analyzed, and automatically escalated to an incident management platform using workflow automation.
 
-This project was developed as a proof of concept for cloud security monitoring and SOAR fundamentals.
+This project serves as a proof of concept and an academic introduction to SIEM and SOAR fundamentals.
 
 ---
 
@@ -16,6 +16,8 @@ The solution is composed of the following components:
 - **Graylog** – SIEM used for log ingestion, analysis, and alert generation  
 - **n8n** – Workflow automation and orchestration engine  
 - **TheHive 5** – Incident and case management platform  
+- **MongoDB** – Graylog metadata storage  
+- **Elasticsearch** – Log indexing and search engine  
 - **Docker** – Containerized deployment  
 - **AWS EC2** – Cloud infrastructure hosting the environment  
 
@@ -30,7 +32,57 @@ n8n
 ↓
 TheHive (Alert / Case)
 
+
 ---
+
+## ⚙️ Features
+
+- Centralized ingestion of simulated cloud security events
+- Detection of sensitive security activities
+- Automated alert generation in Graylog
+- Alert forwarding to n8n via HTTP webhooks
+- Conditional processing using n8n workflows
+- Automatic creation of alerts or cases in TheHive
+- Fully containerized and modular architecture
+
+---
+
+## 🧪 Event Simulation
+
+Due to access limitations to real cloud audit logs, the project relies on **simulated security events** representing realistic cloud security scenarios, such as:
+- Suspicious access attempts
+- Privilege‑related activities
+- High‑risk security events
+
+These simulations allow validation of the SOAR logic and automation flow.
+
+---
+
+## 🚨 Alerting & Automation
+
+- Alerts are generated in **Graylog** based on predefined detection rules
+- Alerts are forwarded to **n8n** via HTTP notifications
+- n8n workflows evaluate event attributes
+- High‑risk events trigger automatic creation of alerts or cases in **TheHive**
+
+---
+
+## 🐳 Docker Deployment
+
+The entire Mini SOAR environment is deployed using Docker Compose.  
+All services communicate through a dedicated Docker bridge network.
+
+### Services included:
+- Graylog
+- MongoDB
+- Elasticsearch
+- n8n
+- TheHive 5
+
+### Start the environment:
+```bash
+docker-compose up -d
+```
 
 ## ⚙️ Features
 
@@ -72,19 +124,7 @@ Main exposed services:
 - TheHive Web Interface: `http://<EC2_IP>:9002`
 - n8n Web Interface: `http://<EC2_IP>:5678`
 
-
 ---
-
-## 🚀 Future Improvements
-
-- Implementation of a formal **risk calculation model**
-- Integration with real cloud audit logs (e.g. AWS CloudTrail)
-- Risk‑based decision making (LOW / MEDIUM / HIGH)
-- Automated remediation actions
-- Threat intelligence enrichment
-
----
-
 ## 🎓 Academic Context
 
 This mini project serves as an introduction to:
@@ -100,4 +140,3 @@ It provides a solid foundation for a more advanced, risk‑based SOAR project.
 ## 👤 Author
 
 - **Hedir Bel arbia**
-
