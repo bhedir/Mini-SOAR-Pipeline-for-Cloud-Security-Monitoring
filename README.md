@@ -72,15 +72,6 @@ Main exposed services:
 - TheHive Web Interface: `http://<EC2_IP>:9002`
 - n8n Web Interface: `http://<EC2_IP>:5678`
 
----
-
-## ⚠️ Limitations
-
-- The project does not implement a formal risk calculation model
-- Risk levels are assigned directly without impact/likelihood scoring
-- Events are simulated and not sourced from real cloud provider audit logs
-
-These limitations were identified as improvement points for future work.
 
 ---
 
