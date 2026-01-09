@@ -1,0 +1,75 @@
+{
+  "name": "Graylog to TheHive SOAR",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "graylog-alert",
+        "httpMethod": "POST",
+        "responseMode": "onReceived",
+        "options": {}
+      },
+      "name": "Graylog Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [200, 300],
+      "webhookId": "graylog-alert"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$json.body.risk.trim().toUpperCase()}}",
+              "operation": "equals",
+              "value2": "HIGH"
+            }
+          ]
+        }
+      },
+      "name": "Check Risk",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [420, 300]
+    },
+    {
+      "parameters": {
+        "requestMethod": "POST",
+        "url": "http://thehive:9000/api/v1/case",
+        "jsonParameters": true,
+        "options": {},
+        "bodyParametersJson": "={\n  \"title\": \"AWS IAM Alert: {{$json.body.eventName}}\",\n  \"description\": \"User {{$json.body.user}} triggered {{$json.body.eventName}} from IP {{$json.body.source_ip}}\",\n  \"severity\": 3,\n  \"tlp\": 2,\n  \"tags\": [\"aws\", \"iam\", \"graylog\", \"soar\"],\n  \"customFields\": {\n    \"source_ip\": { \"string\": \"{{$json.body.source_ip}}\" },\n    \"user\": { \"string\": \"{{$json.body.user}}\" }\n  }\n}",
+        "headerParametersJson": "={\n  \"Authorization\": \"Bearer K1Y3EMD1zPVgT74D0vCCkDKtGR/BihU+\",\n  \"Content-Type\": \"application/json\"\n}"
+      },
+      "name": "Create TheHive Case",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 2,
+      "position": [660, 220]
+    }
+  ],
+  "connections": {
+    "Graylog Webhook": {
+      "main": [
+        [
+          {
+            "node": "Check Risk",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Risk": {
+      "main": [
+        [
+          {
+            "node": "Create TheHive Case",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    }
+  },
+  "active": false
+}
