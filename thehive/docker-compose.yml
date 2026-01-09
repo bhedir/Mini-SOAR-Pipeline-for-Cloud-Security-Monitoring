@@ -1,0 +1,27 @@
+
+version: "3.7"
+
+services:
+  cassandra:
+    image: cassandra:4.1
+    container_name: cassandra
+    restart: unless-stopped
+    environment:
+      - CASSANDRA_CLUSTER_NAME=thehive
+    volumes:
+      - cassandra-data:/var/lib/cassandra
+
+  thehive:
+    image: strangebee/thehive:5
+    container_name: thehive
+    depends_on:
+      - cassandra
+    ports:
+      - "9002:9000"
+    environment:
+      - THEHIVE_CASSANDRA_HOSTS=cassandra
+      - THEHIVE_CASSANDRA_PORT=9042
+    restart: unless-stopped
+
+volumes:
+  cassandra-data:
